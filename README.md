@@ -1,11 +1,11 @@
 GraPy
-====================
+=====
 By [RetroMelon](https://github.com/RetroMelon)
 
 **GraPy** is a simple library that makes it easy for users to create interactive force directed graphs.
 It utilises PyGame to allow for custom draw functions for nodes, relationships, foreground and background of the graph. The visualisation comes with default dragging functionality for nodes, however, users can poll for mouse events in order to create their own custom behaviours. Since the visualisation runs in a separate thread, the user can add, delete and edit nodes and relationships and have their changes appear in realtime in the visualisation.
 
-#Demo
+# Demo
 
 To run any of the demos, first either install the library using the installation guide below, or copy the ```grapy``` folder in to the ```tests``` folder. navigate to the ```tests``` folder, and click any of the .py files to run.
 
@@ -17,14 +17,14 @@ A screenshot of the [```wikipedia_browser.py```](https://github.com/RetroMelon/G
 alt="WIKIPEDIA BROWSER DEMO" width="400" height="329" border="10" />
 
 
-#Installing
+# Installing
 
-###Dependencies
+### Dependencies
 GraPy depends on the [PyGame](http://pygame.org/wiki/about) library. 
 
 Installation of the library requires [setuptools](https://pypi.python.org/pypi/setuptools).
 
-##Via Python Install
+## Via Python Install
 
 1. Download the [zip archive](https://github.com/RetroMelon/GraPy/archive/master.zip) or clone the repo using: ```git clone git://github.com/RetroMelon/GraPy```
 2. Open a shell in the folder containing setup.py
@@ -42,7 +42,7 @@ To remove the library after use, run:
 
 ```python setup.py develop --uninstall```
 
-##Using Without Installing
+## Using Without Installing
 
 First, ensure that [Pygame](http://pygame.org/wiki/about) version ```1.9.1``` or higher is installed on the target system. To use the library without installing it to the system, download the [zip archive](https://github.com/RetroMelon/GraPy/archive/master.zip) or clone the repo using: ```git clone git://github.com/RetroMelon/GraPy```.
 
