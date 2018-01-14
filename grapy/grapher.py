@@ -18,9 +18,9 @@ from threading import Thread
 import pygame
 from pygame.locals import *
 
-from graph import Graph
-import framerateaverager
-from constants import Constants
+from .graph import Graph
+from .framerateaverager import FramerateAverager
+from .constants import Constants
 
 
 def checkCollision(node, pos):
@@ -158,7 +158,7 @@ class Grapher:
         self.backgrounddrawfunction = self.defaultbackgrounddrawfunction
         self.foregrounddrawfunction = self.defaultforegrounddrawfunction
 
-        self._frameaverager = framerateaverager.FramerateAverager()
+        self._frameaverager = FramerateAverager()
         _targetframerate = framerate
 
     def setGraph(self, graph):

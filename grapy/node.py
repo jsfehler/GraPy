@@ -1,6 +1,6 @@
 import math
 
-from constants import Constants
+from .constants import Constants
 
 
 def findDistance(node1, node2):

@@ -1,4 +1,4 @@
-from urllib import urlopen
+from urllib.request import urlopen
 
 
 def finduniquepages(listofpages):
@@ -11,14 +11,18 @@ def finduniquepages(listofpages):
 
 
 def findlinksonpage(pagename):
-    html = urlopen("http://en.wikipedia.org/wiki/"+pagename).read()
+    if isinstance(pagename, bytes):
+        pagename = pagename.decode("utf-8")
 
-    split1 = html.split("\"")
+    url = "http://en.wikipedia.org/wiki/{}".format(pagename)
+    html = urlopen(url).read()
+
+    split1 = html.split(b"\"")
 
     pages = []
 
     for chunk in split1:
-        if chunk.startswith("/wiki/") and (not ":" in chunk and not "#" in chunk and not "%" in chunk):
+        if chunk.startswith(b"/wiki/") and (b":" not in chunk and b"#" not in chunk and b"%" not in chunk):
             pages = pages + [chunk[6:]]
 
     uniquepages = finduniquepages(pages)

@@ -1,6 +1,6 @@
 import threading
 
-from debug import DebugMsg
+from .debug import DebugMsg
 
 # The graph object contains a bunch of nodes and is responsible for maintaining
 # the datastructure of nodes. and having physics act upon them
@@ -119,8 +119,8 @@ class Graph:
         """This method calculates and applies repulsive forces for
         each node on oneanother.
         """
-        for index, node in enumerate(self.nodes.values()):
-            for node2 in self.nodes.values()[index + 1:]:
+        for index, node in enumerate(list(self.nodes.values())):
+            for node2 in list(self.nodes.values())[index + 1:]:
                 fx, fy = node.calculateRepulsiveForce(node2)
                 node.applyForce((fx, fy))
                 node2.applyForce((-fx, -fy))

@@ -12,18 +12,12 @@ import pygame
 import webbrowser
 
 from grapy import *
+from grapy.grapher import tupleSubtract
 from crawlingfunctions import findlinksonpage
 
+
 # if this is set to true, we will cycle through
-# takes two tuples with two values each, and returns a tuple with the value t1-t2
-
-
-def tupleSubtract(tuple1, tuple2):
-    return (tuple1[0] - tuple2[0], tuple1[1] - tuple2[1])
-
 # adds a new node to the graph near it's parent. assumes that it hasn't been crawled
-
-
 def addnewnode(graph, name, parent):
     parentposition = graph.nodes[parent].position
     nodeposition = (parentposition[0] + 30, parentposition[1] + 30)
@@ -138,7 +132,7 @@ g.setNodeDrawFunction(customdraw)
 g.size = (1000, 800)
 print("SETUP COMPLETE...")
 
-tocrawl = raw_input("\nWhich wikipedia page should we crawl?   ")
+tocrawl = input("\nWhich wikipedia page should we crawl?   ")
 
 n = Node(tocrawl)
 n.data = [0, 0, 0]
