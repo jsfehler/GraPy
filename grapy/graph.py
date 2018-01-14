@@ -40,9 +40,9 @@ class Graph:
     def removeNode(self, nodeID):
         """Removes a node, based on the node's ID.
         """
-        if not nodeID in self.nodes:
-            DebugMsg("TRIED TO REMOVE NODE " +
-                     str(nodeID) + " WHICH DIDN'T EXIST.")
+        if nodeID not in self.nodes:
+            DebugMsg(
+                "TRIED TO REMOVE NODE " + str(nodeID) + " WHICH DIDN'T EXIST.")
             return
 
         outgoings = self.relationships[nodeID][0][:]
@@ -61,11 +61,11 @@ class Graph:
     def removeRelationship(self, outgoing, incoming):
         """Takes the IDs of the outgoing and incoming nodes.
         """
-        if (not outgoing in self.relationships):
+        if outgoing not in self.relationships:
             DebugMsg("TRIED TO REMOVE RELATIONSHIP " + str(outgoing) +
                      "  >  " + str(incoming) + " WHEN OUTGOING DIDN'T EXIST.")
             return
-        if (not incoming in self.relationships):
+        if incoming not in self.relationships:
             DebugMsg("TRIED TO REMOVE RELATIONSHIP " + str(outgoing) +
                      "  >  " + str(incoming) + " WHEN INCOMING DIDN'T EXIST.")
             return
@@ -76,19 +76,19 @@ class Graph:
     def addRelationship(self, outgoing, incoming):
         """Adds a directional relationship to the graph between nodes.
         """
-        if (not outgoing in self.relationships):
+        if outgoing not in self.relationships:
             DebugMsg("TRIED TO ADD RELATIONSHIP " + str(outgoing) +
                      "  >  " + str(incoming) + " WHEN OUTGOING DIDN'T EXIST.")
             return
-        if (not incoming in self.relationships):
+        if incoming not in self.relationships:
             DebugMsg("TRIED TO ADD RELATIONSHIP " + str(outgoing) +
                      "  >  " + str(incoming) + " WHEN INCOMING DIDN'T EXIST.")
             return
-        if (outgoing == incoming):
+        if outgoing == incoming:
             DebugMsg("TRIED TO ADD RELATIONSHIP BETWEEN NODE " +
                      str(outgoing) + " AND ITSELF.")
             return
-        if (incoming in self.relationships[outgoing][0]):
+        if incoming in self.relationships[outgoing][0]:
             DebugMsg("RELATIONSHIP " + str(outgoing) + "  >  " +
                      str(incoming) + " ALREADY EXISTS.")
             return

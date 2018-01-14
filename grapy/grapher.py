@@ -21,7 +21,7 @@ import node
 import framerateaverager
 
 
-# some constants that the user can change in order to change the way the nodes act
+# Constants that the user can change in order to change the way the nodes act
 ATTRACTIVE_FORCE_CONSTANT = 50  # 10000
 REPULSIVE_FORCE_CONSTANT = 10000  # 30000000
 MINIMUM_SPRING_SIZE = 65  # 65
@@ -123,19 +123,19 @@ class Grapher:
     _eventslist = []
 
     def __init__(self, graph=None, size=(800, 600), nodedrawfunction=None, vertexdrawfunction=None, framerate=50):
-        if graph == None:
+        if graph is None:
             self.graph = Graph.Graph()
         else:
             self.graph = graph
 
         self.size = size
 
-        if nodedrawfunction == None:
+        if nodedrawfunction is None:
             self.nodedrawfunction = self.defaultnodedrawfunction
         else:
             self.nodedrawfunction = nodedrawfunction
 
-        if vertexdrawfunction == None:
+        if vertexdrawfunction is None:
             self.vertexdrawfunction = self.defaultvertexdrawfunction
         else:
             self.vertexdrawfunction = vertexdrawfunction
@@ -213,7 +213,7 @@ class Grapher:
 
         # if the mouse is currently not doing anything, and we've clicked the primary mouse button,
         if self._mousemode == 0 and event.button == 1:
-            if not collidingnode == None:
+            if not collidingnode is None:
                 self._clickednode = collidingnode
                 # taking note of whether the colliding node is static so we can reset it correctly later
                 self._clickednodestatic = self.graph.nodes[collidingnode].static
