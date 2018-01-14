@@ -1,12 +1,14 @@
 from urllib import urlopen
 
+
 def finduniquepages(listofpages):
     uniquepages = []
     for p in listofpages:
-        if not p in uniquepages:
+        if p not in uniquepages:
             uniquepages = uniquepages + [p]
 
     return uniquepages
+
 
 def findlinksonpage(pagename):
     html = urlopen("http://en.wikipedia.org/wiki/"+pagename).read()
