@@ -1,6 +1,7 @@
-import node
 import threading
-from debug import *
+import node
+from debug import DebugMsg
+
 #The graph object contains a bunch of nodes and is responsible for maintaining
 #the datastructure of nodes. and having physics act upon them
 
@@ -25,9 +26,10 @@ class Graph:
         self._lock.release()
 
 
-    #takes a node to add to the graph
-    #if the node already exists, we remove it and all its relationships, and re-add it
-    def addNode(self, node):     
+    def addNode(self, node):
+        """Takes a node to add to the graph.
+        If the node exists, remove it and all its relationships, then re-add it.
+        """
         if node.UID in self.nodes:
             self.removeNode(node.UID)
 
@@ -35,8 +37,9 @@ class Graph:
         self.relationships[node.UID] = [[],[]]
 
 
-    #takes the ID of a node to remove
     def removeNode(self, nodeID):
+        """Removes a node, based on the node's ID.
+        """
         if not nodeID in self.nodes:
             DebugMsg("TRIED TO REMOVE NODE "+str(nodeID)+" WHICH DIDN'T EXIST.")
             return
@@ -55,8 +58,9 @@ class Graph:
         del self.nodes[nodeID]
 
 
-    #takes the IDs of the outgoing and imconing nodes
     def removeRelationship(self, outgoing, incoming):
+        """Takes the IDs of the outgoing and incoming nodes.
+        """
         if (not outgoing in self.relationships):
             DebugMsg("TRIED TO REMOVE RELATIONSHIP "+str(outgoing)+"  >  "+str(incoming)+" WHEN OUTGOING DIDN'T EXIST.")
             return
@@ -68,8 +72,9 @@ class Graph:
         self.relationships[incoming][1].remove(outgoing)
 
 
-    #adds a directional relationship to the graph between nodes
     def addRelationship(self, outgoing, incoming):
+        """Adds a directional relationship to the graph between nodes.
+        """
         if (not outgoing in self.relationships):
             DebugMsg("TRIED TO ADD RELATIONSHIP "+str(outgoing)+"  >  "+str(incoming)+" WHEN OUTGOING DIDN'T EXIST.")
             return
@@ -88,20 +93,23 @@ class Graph:
         self.relationships[incoming][1] = self.relationships[incoming][1] + [outgoing]
 
 
-    #the function that does all of the physics calculations. takes framerate
     #we do the following things:
         #calculate and apply attractive forces
         #calculate and apply repulsive forces
         #move each node
     def _doPhysics(self, framerate):
+        """Does all of the physics calculations. Takes framerate.
+        """
         self._calculateAttractiveForces()
         self._calculateRepulsiveForces()
 
         self._moveAllNodes(framerate)
 
 
-    #we go through every outgoing relationship, and for each one apply a force to both the outgoing node and incoming
     def _calculateAttractiveForces(self):
+        """We go through every outgoing relationship, and for each one
+        apply a force to both the outgoing node and incoming.
+        """
         for nodeUID in self.relationships:
             for outgoingrelationUID in self.relationships[nodeUID][0]:
                 fx, fy = self.nodes[nodeUID].calculateAttractiveForce(self.nodes[outgoingrelationUID])
@@ -109,8 +117,9 @@ class Graph:
                 self.nodes[outgoingrelationUID].applyForce((-fx, -fy))
 
 
-    #this method calculates and applies repulsive forces for each node on oneanother. 
     def _calculateRepulsiveForces(self):
+        """This method calculates and applies repulsive forces for each node on oneanother.
+        """
         for index, node in enumerate(self.nodes.values()):
             for node2 in self.nodes.values()[index+1:]:
                 fx, fy = node.calculateRepulsiveForce(node2)
@@ -118,7 +127,8 @@ class Graph:
                 node2.applyForce((-fx, -fy))
 
 
-    #applies each node's forces to it
     def _moveAllNodes(self, framerate):
+        """Applies each node's forces to it.
+        """
         for n in self.nodes.values():
             n.move(framerate)

@@ -4,18 +4,22 @@
 # the function takes a node and a camera and is used to draw every node on the graph
 # the grapher object also completely handles scrolling around the map, so that does not count as input.
 
-# as of right now this class contains an infinite while loop. This may need to
-# be changed if we are to make this useful in other applications
+#as of right now this class contains an infinite while loop. This may need to
+#be changed if we are to make this useful in other applications
+from __future__ import print_function
+
+import math
+import random
+import time
+from threading import Thread
+
+import pygame
+from pygame.locals import *
 
 import graph
 import node
 import framerateaverager
-import pygame
-import math
-from pygame.locals import *
-import time
-import random
-from threading import *
+
 
 # some constants that the user can change in order to change the way the nodes act
 ATTRACTIVE_FORCE_CONSTANT = 50  # 10000
@@ -189,15 +193,16 @@ class Grapher:
 
     def _processInput(self):
         for event in pygame.event.get():
-            if event.type == QUIT:
-                print "QUITTING: CLOSE BUTTON HAS BEEN CLICKED..."
-                self._quit = True
-            elif event.type == MOUSEBUTTONDOWN:
-                self._processMouseButtonClick(event)
-            elif event.type == MOUSEBUTTONUP:
-                self._processMouseButtonRelease(event)
-            elif event.type == MOUSEMOTION:
-                self._processMouseMovement(event)
+                if event.type == QUIT:
+                    print("QUITTING: CLOSE BUTTON HAS BEEN CLICKED...")
+                    self._quit = True
+                elif event.type == MOUSEBUTTONDOWN:
+                    self._processMouseButtonClick(event)
+                elif event.type == MOUSEBUTTONUP:
+                    self._processMouseButtonRelease(event)
+                elif event.type == MOUSEMOTION:
+                        self._processMouseMovement(event)
+
         pygame.event.clear()
 
     def _processMouseButtonClick(self, event):
@@ -307,11 +312,12 @@ class Grapher:
             # unlocking the graph to allow other threads to use/edit it
             self.graph.unlock()
 
-            # the slow print statements cause frametime abnormalities leading to bizarre node behaviour
-            if(framecount % 200 == 0):
-                print "TIMES:  ", "Input", inputtime, "   Physics", physicstime, "   Draw", drawtime
-                print "frametime:", self._frametime
-                print "framerate used in calculation:", self._realframerate
+            #the slow print statements cause frametime abnormalities leading to bizarre node behaviour
+            if(framecount%200 == 0):
+                print("TIMES:  ", "Input", inputtime, "   Physics", physicstime, "   Draw", drawtime)
+                print("frametime:", self._frametime)
+                print("framerate used in calculation:", self._realframerate)
+
                 framecount = 0
 
         self.running = False
