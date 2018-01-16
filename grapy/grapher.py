@@ -30,10 +30,11 @@ FRICTION_COEFFICIENT = 0.0005
 # this will be calculated whenever we change the friction coefficient or framerate
 PER_FRAME_FRICTION_COEFFICIENT = 1
 
-# the nodes have a radius, but for the purposes of speed/efficiency, we do a bounding box collision detection
-
 
 def checkCollision(node, pos):
+    """Nodes have a radius, but for the purposes of speed/efficiency,
+    we do a bounding box collision detection.
+    """
     if pos[0] < node.position[0] - node.radius:
         return False
     if pos[0] > node.position[0] + node.radius:
@@ -44,16 +45,18 @@ def checkCollision(node, pos):
         return False
     return True
 
-# takes two tuples with two values each, and returns a tuple with the value t1+t2
-
 
 def tupleAdd(tuple1, tuple2):
+    """Takes two tuples with two values each, and returns a tuple with
+    the value t1 + t2
+    """
     return (tuple1[0] + tuple2[0], tuple1[1] + tuple2[1])
-
-# takes two tuples with two values each, and returns a tuple with the value t1-t2
 
 
 def tupleSubtract(tuple1, tuple2):
+    """Takes two tuples with two values each, and returns a tuple with
+    the value t1 - t2
+    """
     return (tuple1[0] - tuple2[0], tuple1[1] - tuple2[1])
 
 
