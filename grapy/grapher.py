@@ -16,8 +16,7 @@ from threading import Thread
 import pygame
 from pygame.locals import *
 
-import graph
-import node
+from graph import Graph
 import framerateaverager
 
 
@@ -117,7 +116,7 @@ class Grapher:
 
     def __init__(self, graph=None, size=(800, 600), nodedrawfunction=None, vertexdrawfunction=None, framerate=50):
         if graph is None:
-            self.graph = Graph.Graph()
+            self.graph = Graph()
         else:
             self.graph = graph
 
