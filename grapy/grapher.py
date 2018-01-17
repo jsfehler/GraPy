@@ -18,6 +18,7 @@ from pygame.locals import *
 
 from graph import Graph
 import framerateaverager
+from constants import Constants
 
 
 def checkCollision(node, pos):
@@ -175,9 +176,8 @@ class Grapher:
 
     # calculates the frictional coefficient for the frame, and changes the global variable
     def _calculateFrictionCoefficient(self, framerate):
-        global PER_FRAME_FRICTION_COEFFICIENT
-        PER_FRAME_FRICTION_COEFFICIENT = math.pow(
-            FRICTION_COEFFICIENT, 1.0 / framerate)
+        Constants.PER_FRAME_FRICTION_COEFFICIENT = math.pow(
+            Constants.FRICTION_COEFFICIENT, 1.0 / framerate)
 
     def start(self):
         self._thread = Thread(target=self._run)

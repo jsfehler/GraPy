@@ -1,12 +1,6 @@
 import math
 
-from constants import (
-    ATTRACTIVE_FORCE_CONSTANT,
-    REPULSIVE_FORCE_CONSTANT,
-    MINIMUM_SPRING_SIZE,
-    FRICTION_COEFFICIENT,
-    PER_FRAME_FRICTION_COEFFICIENT
-)
+from constants import Constants
 
 # the node class is one that has a UID, and some physical properties to define its location in space.
 # the node class knows only of itself, so has no knowledge of which nodes it is connected to.
@@ -76,7 +70,7 @@ class Node:
     def _calcAttractiveForceMagnitude(self, other):
         distance = findDistance(self, other)
         # we should perhaps add in a minimum string length later on.
-        return ATTRACTIVE_FORCE_CONSTANT * (distance - MINIMUM_SPRING_SIZE)
+        return Constants.ATTRACTIVE_FORCE_CONSTANT * (distance - MINIMUM_SPRING_SIZE)
 
     def calculateRepulsiveForce(self, other):
         forcemagnitude = self._calcRepulsiveForceMagnitude(other)
@@ -92,7 +86,7 @@ class Node:
         distance = findDistance(self, other)
         if distance < 15:
             distance = 15
-        return -REPULSIVE_FORCE_CONSTANT * 1.0 * (self.charge * other.charge) / ((distance * 0.2)**2 + (self.charge * other.charge))
+        return -Constants.REPULSIVE_FORCE_CONSTANT * 1.0 * (self.charge * other.charge) / ((distance * 0.2)**2 + (self.charge * other.charge))
 
     def calculateAttractiveForces(self, nodeslist):
         return map(self.calculateAttractiveForce, nodeslist)
@@ -108,29 +102,31 @@ class Node:
 
     # calculates the frictional force but does not apply it
     def calculateFrictionalForce(self):
-        return (self.velocity[0] * -FRICTION_COEFFICIENT * self.mass, self.velocity[1] * -FRICTION_COEFFICIENT * self.mass)
+        return (self.velocity[0] * -Constants.FRICTION_COEFFICIENT * self.mass, self.velocity[1] * -Constants.FRICTION_COEFFICIENT * self.mass)
 
     # takes the framerate of the simulation. this should be an unchanging/static framerate, and should ideally not fluctuate
     def move(self, framerate):
         if not self.static:
             self.applyForce(self.calculateFrictionalForce())
 
-            totalforce = (0, 0)
+            totalforce = (0.0, 0.0)
             for f in self._forcelist:
                 totalforce = (totalforce[0] + f[0], totalforce[1] + f[1])
 
             self.acceleration = (self.acceleration[0] + (
                 totalforce[0] / self.mass), self.acceleration[1] + (totalforce[1] / self.mass))
 
-            self.velocity = (self.velocity[0] + self.acceleration[0] /
-                             framerate, self.velocity[1] + self.acceleration[1] / framerate)
+            self.velocity = (
+                self.velocity[0] + self.acceleration[0] / framerate,
+                self.velocity[1] + self.acceleration[1] / framerate)
 
-            frictionalcoefficient = PER_FRAME_FRICTION_COEFFICIENT
+            frictionalcoefficient = Constants.PER_FRAME_FRICTION_COEFFICIENT
             self.velocity = (
                 self.velocity[0] * frictionalcoefficient, self.velocity[1] * frictionalcoefficient)
 
-            self.position = (self.position[0] + self.velocity[0] /
-                             framerate, self.position[1] + self.velocity[1] / framerate)
+            self.position = (
+                self.position[0] + self.velocity[0] / framerate,
+                self.position[1] + self.velocity[1] / framerate)
 
         self.acceleration = (0.0, 0.0)
         self._forcelist = []
