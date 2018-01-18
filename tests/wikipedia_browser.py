@@ -6,13 +6,13 @@
 # node data[0] is the current state of crawling. 0 - uncrawled, 1 - currently crawling, 2 - crawled
 from __future__ import print_function
 
-from threading import *
+from threading import Thread
 
 import pygame
 import webbrowser
 
 from grapy import *
-from crawlingfunctions import *
+from crawlingfunctions import findlinksonpage
 
 # if this is set to true, we will cycle through
 # takes two tuples with two values each, and returns a tuple with the value t1-t2

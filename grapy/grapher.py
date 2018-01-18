@@ -70,8 +70,13 @@ class Grapher:
         n = (((1 + 1.0 / (0.35 * (relationships + 1)))**(0.35 * relationships) -
               1) / 1.71828) * 254  # tends to 254 as relaitonships tend to infinity
 
-        pygame.draw.circle(screen, (int(n), 0, 255 - int(n)),
-                           position, node.radius, 0)
+        pygame.draw.circle(
+            screen,
+            (int(n), 0, 255 - int(n)),
+            position,
+            node.radius,
+            0
+        )
 
         f = pygame.font.Font(None, 20).render(node.UID, 1, (255, 255, 255))
         # blitting the text with a 5 pixel offset
@@ -205,7 +210,7 @@ class Grapher:
 
         # if the mouse is currently not doing anything, and we've clicked the primary mouse button,
         if self._mousemode == 0 and event.button == 1:
-            if not collidingnode is None:
+            if collidingnode is not None:
                 self._clickednode = collidingnode
                 # taking note of whether the colliding node is static so we can reset it correctly later
                 self._clickednodestatic = self.graph.nodes[collidingnode].static
