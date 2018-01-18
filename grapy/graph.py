@@ -14,7 +14,8 @@ from debug import DebugMsg
 class Graph:
 
     nodes = {}
-    # relationships contains 2 lists for each entry. the first is outgoing, the second is incoming
+    # relationships contains 2 lists for each entry.
+    # the first is outgoing, the second is incoming
     relationships = {}
 
     data = []  # some arbitrary data the graph can store
@@ -115,7 +116,8 @@ class Graph:
                 self.nodes[outgoingrelationUID].applyForce((-fx, -fy))
 
     def _calculateRepulsiveForces(self):
-        """This method calculates and applies repulsive forces for each node on oneanother.
+        """This method calculates and applies repulsive forces for
+        each node on oneanother.
         """
         for index, node in enumerate(self.nodes.values()):
             for node2 in self.nodes.values()[index + 1:]:

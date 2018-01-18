@@ -1,8 +1,10 @@
-# this object is going to contain a graph which is in turn going to contain a bunch of nodes.
-# The primary thing this class does is draw the nodes. This is the level that the camera is implemented at.
+# This object will contain a graph which in turn will contain a bunch of nodes.
+# The primary thing this class does is draw the nodes.
+# This is the level that the camera is implemented at.
 # the user can supply a function to draw nodes on the graph.
-# the function takes a node and a camera and is used to draw every node on the graph
-# the grapher object also completely handles scrolling around the map, so that does not count as input.
+# the function takes a node and a camera and then draws every node on the graph
+# the grapher object also completely handles scrolling around the map,
+# so that does not count as input.
 
 # as of right now this class contains an infinite while loop. This may need to
 # be changed if we are to make this useful in other applications
@@ -53,22 +55,28 @@ def tupleSubtract(tuple1, tuple2):
 class Grapher:
 
     # Some other draw functions that we might want to use
-    # all draw functions must take a screen, node and the position of the node as a tuple after compensation for the camera's position
     def drawwithoutcolouring(self, screen, node, graph, position):
+        """
+        Args:
+            screen
+            node
+            graph
+            position (tuple): Position of the node
+                (after compensation for the camera's position)
+        """
         pygame.draw.circle(screen, (50, 50, 255), position, node.radius, 0)
 
         f = pygame.font.Font(None, 20).render(node.UID, 1, (255, 255, 255))
         # blitting the text with a 5 pixel offset
         screen.blit(f, tupleSubtract(position, (5, 5)))
 
-    # all draw functions must take a screen, node and the position of the node as a tuple after compensation for the camera's position
     def defaultnodedrawfunction(self, screen, node, graph, position):
         relationships = len(
             graph.relationships[node.UID][0]) + len(graph.relationships[node.UID][1])
 
-        # n produces a colour gradient between 0 and 254 depending on the number of relationships
-        n = (((1 + 1.0 / (0.35 * (relationships + 1)))**(0.35 * relationships) -
-              1) / 1.71828) * 254  # tends to 254 as relaitonships tend to infinity
+        # n produces a colour gradient between 0 and 254,
+        # depending on the number of relationships
+        n = (((1 + 1.0 / (0.35 * (relationships + 1)))**(0.35 * relationships) - 1) / 1.71828) * 254  # tends to 254 as relaitonships tend to infinity
 
         pygame.draw.circle(
             screen,
@@ -102,7 +110,11 @@ class Grapher:
     camera = None
 
     running = False
-    _quit = False  # this can be changed using the stop() function with either another thread or the exit button at the top of the screen. When it does, the while loop in the thread breaks
+
+    # this can be changed using the stop() function with either another thread
+    # or the exit button at the top of the screen.
+    # When it does, the while loop in the thread breaks
+    _quit = False
 
     _targetframerate = 50
     _realframerate = _targetframerate
@@ -112,15 +124,19 @@ class Grapher:
 
     _thread = None
 
-    # 0 - the mouse is unclicked and not performing any tasks, 1 - the mouse is controlling a node, 2 - the mouse is controlling the camera
+    # 0 - the mouse is unclicked and not performing any tasks
+    # 1 - the mouse is controlling a node
+    # 2 - the mouse is controlling the camera
     _mousemode = 0
+
     _lastmousepos = (0, 0)
     _clickednode = None
     _clickednodestatic = False
 
     _eventslist = []
 
-    def __init__(self, graph=None, size=(800, 600), nodedrawfunction=None, vertexdrawfunction=None, framerate=50):
+    def __init__(self, graph=None, size=(800, 600), nodedrawfunction=None,
+                 vertexdrawfunction=None, framerate=50):
         if graph is None:
             self.graph = Graph()
         else:
@@ -160,18 +176,19 @@ class Grapher:
     def setForegroundDrawFunction(self, foregrounddrawfunction):
         self.foregrounddrawfunction = foregrounddrawfunction
 
-    # this method gets a list of all of the mouse and key events since the last call.
+    # Gets a list of all of the mouse and key events since the last call.
     def getEvents(self):
         e = self._eventslist[:]
         self._eventslist = []
         return e
 
-    # gets the mosue position considering the camera position
+    # Gets the mosue position considering the camera position
     def getRelativeMousePosition(self):
         p = pygame.mouse.get_pos()
         return (p[0] + self.camera.position[0], p[1] + self.camera.position[1])
 
-    # returns the UID of the first node that it finds to collide with "position". "position" is a tuple of x and y coords.
+    # returns the UID of the first node that it finds to collide with
+        # "position". "position" is a tuple of x and y coords.
     # if no nodes collide, None is returned
     def findCollidingNode(self, position):
         for n in self.graph.nodes:
@@ -179,8 +196,9 @@ class Grapher:
                 return n
         return None
 
-    # calculates the frictional coefficient for the frame, and changes the global variable
     def _calculateFrictionCoefficient(self, framerate):
+        """Calculates the frictional coefficient for the frame.
+        """
         Constants.PER_FRAME_FRICTION_COEFFICIENT = math.pow(
             Constants.FRICTION_COEFFICIENT, 1.0 / framerate)
 
@@ -220,8 +238,7 @@ class Grapher:
                 self._mousemode = 2
 
         # the code to add an event to the event queue will go here
-        self._eventslist = self._eventslist + \
-            [(0, event.button, collidingnode)]
+        self._eventslist = self._eventslist + [(0, event.button, collidingnode)]
 
     def _processMouseButtonRelease(self, event):
         collidingnode = self.findCollidingNode(self.getRelativeMousePosition())
@@ -232,20 +249,21 @@ class Grapher:
                     self.graph.nodes[self._clickednode].static = self._clickednodestatic
             self._resetmousemode()
 
-        self._eventslist = self._eventslist + \
-            [(1, event.button, collidingnode)]
+        self._eventslist = self._eventslist + [(1, event.button, collidingnode)]
 
     def _processMouseMovement(self, event):
         if self._mousemode == 1:
-            # we need to check if the clicked node still exists because there is a chance it could have been deleted since the last mouse move
+            # Check if the clicked node still exists because there is a chance
+            # it could have been deleted since the last mouse move
             if self._clickednode in self.graph.nodes:
-                self.graph.nodes[self._clickednode].position = self.getRelativeMousePosition(
-                )
+                self.graph.nodes[self._clickednode].position = self.getRelativeMousePosition()
             else:
                 self._resetmousemode()
         elif self._mousemode == 2:
-            self.camera.position = (self.camera.position[0] + (self._lastmousepos[0] - pygame.mouse.get_pos()[
-                                    0]), self.camera.position[1] + (self._lastmousepos[1] - pygame.mouse.get_pos()[1]))
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            self.camera.position = (
+                self.camera.position[0] + (self._lastmousepos[0] - mouse_x),
+                self.camera.position[1] + (self._lastmousepos[1] - mouse_y))
         self._lastmousepos = pygame.mouse.get_pos()
 
     def _resetmousemode(self):
@@ -268,10 +286,13 @@ class Grapher:
             framecount = framecount + 1
             self._frametime = frameclock.tick_busy_loop(self._targetframerate)
 
-            # adding a new frametime to the frameaverager and getting the average framerate
+            # adding a new frametime to the frameaverager and getting the
+            # average framerate
             self._frameaverager.addFrametime(self._frametime)
             self._realframerate = self._frameaverager.getAverageFramerate()
-            # locking the graph datastructure so that it canot be changed while we iterate over it
+
+            # locking the graph datastructure so that it canot be changed while
+            # we iterate over it
             self.graph.lock()
 
             starttime = time.clock()
@@ -290,12 +311,15 @@ class Grapher:
             self.backgrounddrawfunction(screen, self.camera.position)
 
             for r in self.graph.relationships:  # drawing lines
+                cam_x = self.camera.position[0]
+                cam_y = self.camera.position[1]
                 for i in self.graph.relationships[r][0]:
-                    start = (self.graph.nodes[r].position[0] - self.camera.position[0],
-                             self.graph.nodes[r].position[1] - self.camera.position[1])
-                    end = (self.graph.nodes[i].position[0] - self.camera.position[0],
-                           self.graph.nodes[i].position[1] - self.camera.position[1])
-                    # we account for the camera position before passing it to the draw method
+                    start = (self.graph.nodes[r].position[0] - cam_x,
+                             self.graph.nodes[r].position[1] - cam_y)
+                    end = (self.graph.nodes[i].position[0] - cam_x,
+                           self.graph.nodes[i].position[1] - cam_y)
+                    # Account for the camera position before passing it to
+                    # the draw method
                     self.vertexdrawfunction(screen, start, end)
 
             for n in self.graph.nodes.values():  # drawing nodes
@@ -309,7 +333,8 @@ class Grapher:
             # unlocking the graph to allow other threads to use/edit it
             self.graph.unlock()
 
-            # the slow print statements cause frametime abnormalities leading to bizarre node behaviour
+            # the slow print statements cause frametime abnormalities,
+            # leading to bizarre node behaviour
             if(framecount % 200 == 0):
                 print("TIMES:  ", "Input", inputtime, "   Physics",
                       physicstime, "   Draw", drawtime)

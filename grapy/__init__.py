@@ -1,8 +1,5 @@
-##import Graph
-##import Grapher
-##import Node
-from .graph import *
+from .graph import Graph
 from .grapher import *
 from .node import *
-from .framerateaverager import *
-from .debug import *
+from .framerateaverager import FramerateAverager
+from .debug import DebugMsg

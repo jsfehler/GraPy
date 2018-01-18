@@ -90,7 +90,7 @@ class Node:
         distance = findDistance(self, other)
         if distance < 15:
             distance = 15
-        charge = (self.charge * other.charge)
+        charge = self.charge * other.charge
         return -Constants.REPULSIVE_FORCE_CONSTANT * 1.0 * charge / ((distance * 0.2)**2 + charge)
 
     def calculateAttractiveForces(self, nodeslist):
